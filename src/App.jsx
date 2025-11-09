@@ -55,19 +55,19 @@ export default function App() {
         </section>
 
         {/* Only show Load More button when characters exist */}
-        {filtered.length > 0 && (
+        {filtered.length > 0 && hasMore && query === '' && (
           <div className="mt-6 flex justify-center items-center gap-4">
             {error && <div className="text-red-600">Failed to load characters.</div>}
             <button
               onClick={() => load(page)}
-              disabled={!hasMore || loading}
+              disabled={loading}
               className="px-4 py-2 bg-indigo-600 text-white rounded disabled:opacity-60"
             >
-              {loading ? <span className="spinner inline-block mr-2"></span> : null}
-              {loading ? 'Loading...' : hasMore ? 'Load More' : 'No more'}
+              {loading ? 'Loading...' : 'Load More'}
             </button>
           </div>
         )}
+
       </main>
 
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { fetchPeoplePage } from '../api'
+import { fetchPeoplePage, fetchResource } from '../api'
 
 export default function usePeoplePagination() {
   const [items, setItems] = useState([])
@@ -15,7 +15,23 @@ export default function usePeoplePagination() {
     setError(null)
     try {
       const data = await fetchPeoplePage(nextPage)
-      const annotated = data.results.map(p => ({ ...p, dateAdded: new Date().toISOString() }))
+
+      // 🧠 Fetch species names for all people
+      const annotated = await Promise.all(
+        data.results.map(async (p) => {
+          let speciesName = 'Human' // default
+          if (p.species?.length > 0) {
+            try {
+              const speciesData = await fetchResource(p.species[0])
+              speciesName = speciesData.name || 'Unknown'
+            } catch {
+              speciesName = 'Unknown'
+            }
+          }
+          return { ...p, _speciesName: speciesName, dateAdded: new Date().toISOString() }
+        })
+      )
+
       setItems(prev => [...prev, ...annotated])
       setHasMore(Boolean(data.next))
       if (data.next) setPage(nextPage + 1)

@@ -36,7 +36,13 @@ export default function CharacterModal({ person, onClose }) {
       <div className="bg-white rounded-lg w-full max-w-2xl shadow-lg overflow-auto">
         <div className="flex justify-between items-center p-4 border-b">
           <h3 className="text-xl font-semibold">{person.name}</h3>
-          <button onClick={onClose} className="text-gray-600 hover:text-black">Close</button>
+          <button
+            onClick={onClose}
+            className="text-gray-600 hover:text-black text-2xl font-bold leading-none"
+            aria-label="Close"
+          >
+            &times;
+          </button>
         </div>
 
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
